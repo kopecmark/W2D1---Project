@@ -1,31 +1,62 @@
+require 'byebug'
+
 class Employee
-  attr_reader :salary, :name
-  def initialize(name, title, salary, boss)
-    @name, @title, @salary, @boss = name, title, salary, boss
+  attr_reader :salary, :name, :boss
+  def initialize(name, title, salary, boss=nil)
+    @name, @title, @salary = name, title, salary
+    @boss = boss
+  end
+  
+  def boss=(boss)
+    @boss = boss
+    boss.add_employees(self) unless boss.nil?
+    boss
   end
   
   def bonus(multiplier)
-    muliplier * @salary
+    multiplier * @salary
   end
+  
 end
 
 class Manager < Employee
-  def initialize(name)
-    @name = name
+  attr_reader :employees
+  def initialize(name, title, salary, boss=nil)
+    # @name = super.boss
+    super
     @employees = []
   end
   
-  def add_employees(person)
-    if person.boss == @name
-      @employees << person
-    end
+  def add_employees(subordinate)
+    @employees << subordinate
+    subordinate
   end
   
   def bonus(multiplier)
-    total_salary = 0 
-    total_salary = @employees.salary.reduce(:+)
-    multiplier * total_salary
+    multiplier * self.total_salary
+  end
+  
+  def total_salary
+    total = 0 
+    employees.each do |employee|
+      debugger
+      if employee.is_a?(Manager)
+        total+= employee.salary+employee.total_salary
+      else
+        total += employee.salary
+      end
+    end
+    total 
   end
 end
 
-ned = Employee.new("Ned", "Founder", 1000000, nil)
+ned = Manager.new("Ned", "Founder", 100000)
+darren = Manager.new("Darren", "TA Manager", 78000, ned)
+shawna = Employee.new("Shawna", "TA", 12000, darren)
+david = Employee.new("David", "TA", 10000, darren)
+
+p ned.bonus(5)
+p darren.bonus(4)
+p david.bonus(3)
+# p david.boss
+# p david.employees
