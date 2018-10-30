@@ -19,8 +19,10 @@ class Board
   # 
   def play
     # pos = [0,0]
-    self[[0,0]] = "J"
-    self[[0,1]] = "J"
+    self[[0,0]] = "A"
+    self[[0,1]] = "B"
+    self[[1,1]] = "C"
+    self[[1,0]] = "D"
     
   end
   
@@ -29,6 +31,12 @@ class Board
     raise "the piece cannot move to #{end_pos}" unless self[end_pos].nil?
     self[end_pos] = self[start_pos]
     self[start_pos] = nil
+  end
+  
+  def valid_pos?(pos)
+    size = rows.length
+    return false if pos[0] < 0 || size < pos[0] || size < pos[1] || 0 > pos[1]
+    true
   end
 
 end
