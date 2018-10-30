@@ -41,11 +41,7 @@ class Board
 
 end
 
-class Piece 
-  def initialize
-    @piece = "H"
-  end
-end
+
 
 
 

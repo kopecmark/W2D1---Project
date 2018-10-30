@@ -5,9 +5,9 @@ require_relative 'board'
 class Display
   attr_reader :board, :cursor
   
-  def initialize(board) #remove board after test
+  def initialize #remove board after test
     @cursor = Cursor.new([0,0], board)
-    @board = board
+    # @board = board
   end
   
   def render
