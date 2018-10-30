@@ -5,12 +5,12 @@ class Piece
     @board = board
     @color = color
     @pos = pos 
-
   end
   
-  def moves
-  
+  def empty?(pos)
+    board.rows[pos].nil? #change this to a null piece later
   end
+  
   
 
 end
@@ -45,7 +45,7 @@ module SlidingPiece
   
   def grow_unblocked_moves_in_dir(dx,dy)
     result = [@pos]
-    (board.rows.size-1).times do 
+    ((board.rows.length)-1).times do 
       result << [result.last, [dx,dy]].transpose.map { |e|  e.reduce(:+) }
     end
     result
@@ -54,15 +54,20 @@ end
   
   
   
-end 
 
 class Bishop < Piece
+  attr_reader :symbol
   include SlidingPiece
+  def initialize 
+    @symbol = "♝ "
+  end
   
   def move_dirs
-    horizontal_dirs #length 4
+    horizontal_dirs 
   end  
-  
+  def inspect
+    "B"
+  end
 end
 
 class Queen < Piece 
@@ -78,3 +83,24 @@ class Queen < Piece
 end 
 
 
+class NullPiece < Piece
+  attr_reader :symbol
+  # include Singleton
+
+  def initialize
+    @symbol = "  "
+    @color = :none
+  end
+
+  def empty?
+    true
+  end
+
+  def moves
+    []
+  end
+  def inspect
+    "NP"
+  end
+
+end

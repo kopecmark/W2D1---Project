@@ -1,10 +1,14 @@
+require 'byebug'
+require_relative 'pieces'
+
 class Board
   attr_reader :rows
   
+  
   def initialize
-    @rows = Array.new(2) {Array.new(2)}
-    @piece = Piece.new
-    
+    @rows = Array.new(8) {Array.new(8)}
+    @null = NullPiece.new
+    populate_board
   end
   
   def [](pos)
@@ -15,15 +19,18 @@ class Board
   def []=(pos, val)
     x,y = pos
     @rows[x][y] = val
-  end
-  # 
-  def play
-    # pos = [0,0]
-    self[[0,0]] = "A"
-    self[[0,1]] = "B"
-    self[[1,1]] = "C"
-    self[[1,0]] = "D"
-    
+  end 
+  
+  def populate_board
+    # debugger
+    rows.each_with_index do |el,row|
+      el.each_with_index do |c,col|
+        pos = [row,col]
+        self[pos] = @null
+      end
+    end 
+    pos = [0,1]
+    self[pos] = Bishop.new
   end
   
   def move_piece(start_pos, end_pos)
@@ -44,13 +51,3 @@ end
 
 
 
-
-
-if __FILE__ == $PROGRAM_NAME
-  game = Board.new
-  game.play
-  p game.rows
-  game.move_piece([0,0],[1,1])
-  p game.rows
-  
-end
