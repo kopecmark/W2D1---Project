@@ -16,15 +16,21 @@ class Board
     x,y = pos
     @rows[x][y] = val
   end
-  
+  # 
   def play
-    self[0,0] = "J"
+    # pos = [0,0]
+    self[[0,0]] = "J"
+    self[[0,1]] = "J"
+    
   end
   
   def move_piece(start_pos, end_pos)
     raise "there is no piece at #{start_pos}" if self[start_pos].nil?
     raise "the piece cannot move to #{end_pos}" unless self[end_pos].nil?
+    self[end_pos] = self[start_pos]
+    self[start_pos] = nil
   end
+
 end
 
 class Piece 
@@ -39,6 +45,8 @@ end
 if __FILE__ == $PROGRAM_NAME
   game = Board.new
   game.play
-  game.move_piece([0,0],[0,1])
+  p game.rows
+  game.move_piece([0,0],[1,1])
+  p game.rows
   
 end
