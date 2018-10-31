@@ -2,7 +2,7 @@ require 'byebug'
 require_relative 'pieces'
 
 class Board
-  attr_reader :rows
+  attr_reader :rows, :null
   
   
   def initialize
@@ -30,7 +30,7 @@ class Board
       end
     end 
     pos = [0,1]
-    self[pos] = Bishop.new
+    self[pos] = Bishop.new(:black,self,pos)
   end
   
   def move_piece(start_pos, end_pos)
@@ -41,7 +41,7 @@ class Board
   end
   
   def valid_pos?(pos)
-    size = rows.length
+    size = rows.length - 1
     return false if pos[0] < 0 || size < pos[0] || size < pos[1] || 0 > pos[1]
     true
   end

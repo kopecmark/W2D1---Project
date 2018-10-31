@@ -1,5 +1,6 @@
 class Piece
-  attr_reader :board
+  attr_reader :board, :pos
+  attr_writer :pos
   
   def initialize(color,board,pos)
     @board = board
@@ -11,7 +12,11 @@ class Piece
     board.rows[pos].nil? #change this to a null piece later
   end
   
-  
+  def valid_moves
+    moves.select do |move|
+      board.valid_pos?(move)
+    end
+  end
 
 end
 
@@ -35,6 +40,7 @@ module SlidingPiece
       move_dirs.each do |el|
         result += grow_unblocked_moves_in_dir(el[0],el[1])
       end
+      
       result
   end
   
@@ -45,9 +51,11 @@ module SlidingPiece
   
   def grow_unblocked_moves_in_dir(dx,dy)
     result = [@pos]
-    ((board.rows.length)-1).times do 
+    # debugger
+    (board.rows.length-1).times do 
       result << [result.last, [dx,dy]].transpose.map { |e|  e.reduce(:+) }
     end
+    result.shift
     result
   end
 end
@@ -58,12 +66,13 @@ end
 class Bishop < Piece
   attr_reader :symbol
   include SlidingPiece
-  def initialize 
+  def initialize(color,board,pos) 
     @symbol = "♝ "
+    super
   end
   
   def move_dirs
-    horizontal_dirs 
+    diagonal_dirs 
   end  
   def inspect
     "B"

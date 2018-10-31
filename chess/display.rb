@@ -28,22 +28,12 @@ class Display
       end
       idx+=1
       puts ""
-      # pos=[0,1]
-      # p board[pos].moves
     end
+    # pos=[0,1]
+    # p board[pos].valid_moves
   end
   
-  def play 
-    render
-    cursor.get_input
-    puts ""
-    render
-  end
+  
   
 end
   
-if __FILE__ == $PROGRAM_NAME
-  board = Board.new
-  display = Display.new(board)
-  display.play
-end 

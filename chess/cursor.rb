@@ -32,12 +32,13 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board
-  attr_writer :cursor_pos
+  attr_reader :cursor_pos, :previous_value, :board
+  attr_writer :cursor_pos, :previous_value
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
+    @previous_value = nil
   end
 
   def get_input
@@ -79,7 +80,19 @@ class Cursor
   def handle_key(key)
     case key
     when :return, :space 
-      cursor_pos
+      # debugger
+      if previous_value
+        # debugger
+        if previous_value.valid_moves.include?(cursor_pos)
+          board[cursor_pos] = previous_value
+          board[cursor_pos].pos = cursor_pos
+          self.previous_value = nil
+        end
+      else
+        self.previous_value = board[cursor_pos].dup
+        board[cursor_pos] = board.null
+      end
+      
     when :left, :right, :up,:down
       
       MOVES[key]
@@ -94,7 +107,7 @@ class Cursor
     new_pos = [cursor_pos, diff].transpose.map {|x| x.reduce(:+)}
     
     self.cursor_pos = new_pos if board.valid_pos?(new_pos)
-    
+  
   end
   
 end
